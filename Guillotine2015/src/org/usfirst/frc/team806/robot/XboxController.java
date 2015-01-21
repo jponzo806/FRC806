@@ -27,9 +27,9 @@ public class XboxController extends GenericHID {
         public final int value;
         private static final int kLeftX_val = 0;
         private static final int kLeftY_val = 1;
-        private static final int kTrigger_val = 3;
         private static final int kTriggerLeft_val = 2;
         private static final int kTriggerRight_val = 3;
+        private static final int kTrigger_val = 3;
         private static final int kRightX_val = 4;
         private static final int kRightY_val = 5;
         private static final int kDLeftRight_val = 6;
