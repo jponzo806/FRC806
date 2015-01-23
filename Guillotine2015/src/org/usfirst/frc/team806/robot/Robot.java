@@ -30,11 +30,16 @@ public class Robot extends SampleRobot {
 	
 	RobotDrive drive = new RobotDrive(frontLeft, rearLeft, frontRight, rearRight);
 
-	static Encoder encodFL = new Encoder(0, 1, true, EncodingType.k4X);
-	static Encoder encodFR = new Encoder(2, 3, true, EncodingType.k4X);
-	static Encoder encodRL = new Encoder(4, 5, true, EncodingType.k4X);
-	static Encoder encodRR = new Encoder(6, 7, true, EncodingType.k4X); 
+	static Encoder encodFL = new Encoder(4, 5, true, EncodingType.k4X);
+	static Encoder encodFR = new Encoder(6, 7, true, EncodingType.k4X);
+	static Encoder encodRL = new Encoder(0, 1, true, EncodingType.k4X);
+	static Encoder encodRR = new Encoder(2, 3, true, EncodingType.k4X); 
 
+	PIDController EFL = new PIDController(.1, .1, .1, encodFL, frontLeft);
+	PIDController EFR = new PIDController(.1, .1, .1, encodFR, frontRight);
+	PIDController ERL = new PIDController(100, 2, 22, 1, encodRL, rearLeft);
+	PIDController ERR = new PIDController(.1, .1, .1, encodRR, rearRight);
+	
     private static final Hand LEFTHAND = Hand.kLeft;
 	private static final Hand RIGHTHAND = Hand.kRight;
 	
@@ -93,6 +98,12 @@ public class Robot extends SampleRobot {
 
     public void autonomous() {
     	
+    	encodRL.reset();
+    	ERL.enable();
+     	ERL.setContinuous();   	
+    	ERL.setSetpoint(1000);
+
+    	
       drive.setSafetyEnabled(false);
 
     }
@@ -123,7 +134,7 @@ public class Robot extends SampleRobot {
 				double axisX = SetDeadZone(cont1.getX(LEFTHAND), .25) * driveMultiplier; //strafing
 				double axisY = SetDeadZone(cont1.getY(LEFTHAND), .25) * driveMultiplier; //forward and back
 				double rotation = SetDeadZone(cont1.getX(RIGHTHAND), .15) * driveMultiplier; //rotation
-
+				
 				drive.mecanumDrive_Cartesian(axisX, axisY, rotation, 0);
 			}
 			
@@ -131,9 +142,20 @@ public class Robot extends SampleRobot {
 			//SmartDashboard.putString("DB/Button 0", "Test");
 			
 			
-			SmartDashboard.putString("DB/String 0", "Encoder Raw: ");
+			SmartDashboard.putString("DB/String 0", "Encoder FL Raw: ");
 			SmartDashboard.putString("DB/String 5",  String.valueOf(encodFL.getRaw()));
 			
+			SmartDashboard.putString("DB/String 1", "Encoder FR Raw: ");
+			SmartDashboard.putString("DB/String 6",  String.valueOf(encodFR.getRaw()));
+			
+			SmartDashboard.putString("DB/String 2", "Encoder RL Raw: ");
+			SmartDashboard.putString("DB/String 7",  String.valueOf(encodRL.getRaw()));
+
+			SmartDashboard.putString("DB/String 3", "Encoder RR Raw: ");
+			SmartDashboard.putString("DB/String 8",  String.valueOf(encodRR.getRaw()));
+			
+			SmartDashboard.putString("DB/String 4", "Loop Count: ");
+			SmartDashboard.putString("DB/String 9",  String.valueOf(count));
 			
 			count++;
 		}
