@@ -30,10 +30,10 @@ public class Robot extends SampleRobot {
 	
 	RobotDrive drive = new RobotDrive(frontLeft, rearLeft, frontRight, rearRight);
 
-	static Encoder encodFL = new Encoder(6, 7, true, EncodingType.k4X);
+	static Encoder encodFL = new Encoder(0, 1, true, EncodingType.k4X);
 	static Encoder encodFR = new Encoder(2, 3, true, EncodingType.k4X);
 	static Encoder encodRL = new Encoder(4, 5, true, EncodingType.k4X);
-	static Encoder encodRR = new Encoder(0, 1, true, EncodingType.k4X); 
+	static Encoder encodRR = new Encoder(6, 7, true, EncodingType.k4X); 
 
     private static final Hand LEFTHAND = Hand.kLeft;
 	private static final Hand RIGHTHAND = Hand.kRight;
@@ -92,6 +92,7 @@ public class Robot extends SampleRobot {
     }
 
     public void autonomous() {
+    	
       drive.setSafetyEnabled(false);
 
     }
@@ -129,6 +130,9 @@ public class Robot extends SampleRobot {
 			//SmartDashboard.putString("DB/String 0", "Button 0: " + SmartDashboard.getBoolean("DB/Button 0"));
 			//SmartDashboard.putString("DB/Button 0", "Test");
 			
+			
+			SmartDashboard.putString("DB/String 0", "Encoder Raw: ");
+			SmartDashboard.putString("DB/String 5",  String.valueOf(encodFL.getRaw()));
 			
 			
 			count++;
