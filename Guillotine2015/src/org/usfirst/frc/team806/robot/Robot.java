@@ -35,10 +35,10 @@ public class Robot extends SampleRobot {
 	static Encoder encodRL = new Encoder(0, 1, true, EncodingType.k4X);
 	static Encoder encodRR = new Encoder(2, 3, true, EncodingType.k4X); 
 
-	PIDController EFL = new PIDController(.1, .1, .1, encodFL, frontLeft);
-	PIDController EFR = new PIDController(.1, .1, .1, encodFR, frontRight);
-	PIDController ERL = new PIDController(100, 2, 22, 1, encodRL, rearLeft);
-	PIDController ERR = new PIDController(.1, .1, .1, encodRR, rearRight);
+	PIDController EFL = new PIDController(0.6, .001, 0.1, encodFL, frontLeft);
+	PIDController EFR = new PIDController(0.6, .001, 0.1, encodFR, frontRight);
+	PIDController ERR = new PIDController(0.6, .001, 0.1, encodRR, rearRight);
+	PIDController ERL = new PIDController(0.6, .001, 0.1, encodRL, rearLeft);
 	
     private static final Hand LEFTHAND = Hand.kLeft;
 	private static final Hand RIGHTHAND = Hand.kRight;
@@ -66,47 +66,61 @@ public class Robot extends SampleRobot {
 		encodFL.setDistancePerPulse(5);
 		encodFL.setReverseDirection(true);
 		encodFL.setSamplesToAverage(7);
-
+		
+		
 		encodFR.setMaxPeriod(.1);
 		encodFR.setMinRate(10);
 		encodFR.setDistancePerPulse(5);
 		encodFR.setReverseDirection(true);
 		encodFR.setSamplesToAverage(7);
-
+		
+		
 		encodRL.setMaxPeriod(.1);
 		encodRL.setMinRate(10);
 		encodRL.setDistancePerPulse(5);
 		encodRL.setReverseDirection(true);
 		encodRL.setSamplesToAverage(7);
+		
 
 		encodRR.setMaxPeriod(.1);
 		encodRR.setMinRate(10);
 		encodRR.setDistancePerPulse(5);
 		encodRR.setReverseDirection(true);
 		encodRR.setSamplesToAverage(7);
-
     }
     
     public void disabled() {
         
     }
-    
     public void robotInit(){
-    	
     	
     }
 
     public void autonomous() {
     	
     	encodRL.reset();
+    	encodRR.reset();
+    	encodFR.reset();
+    	encodFL.reset();
+    	
     	ERL.enable();
-     	ERL.setContinuous();   	
-    	ERL.setSetpoint(1000);
-
+    	ERR.enable();
+    	EFR.enable();
+    	EFL.enable(); 
+    	
+    	ERL.setAbsoluteTolerance(200);
+    	ERR.setAbsoluteTolerance(200);
+    	EFR.setAbsoluteTolerance(200);
+    	EFL.setAbsoluteTolerance(200);
+     	
+    	ERL.setSetpoint(2000);
+    	ERR.setSetpoint(-2000);
+    	EFR.setSetpoint(-2000);
+     	EFL.setSetpoint(2000);
     	
       drive.setSafetyEnabled(false);
 
-    }
+      }
 
 	public void operatorControl() {
 		drive.setSafetyEnabled(true);
@@ -116,15 +130,14 @@ public class Robot extends SampleRobot {
 		
 		while (isEnabled() && isOperatorControl()) {
 			Timer.delay(.05);
-			
-			driveMultiplier = .5;
 
-			if (cont1.getBumper(LEFTHAND) == true) 
+			if (cont1.getBumper(LEFTHAND) == true) {
 				driveMultiplier = .25;
-			
-			else if (cont1.getBumper(RIGHTHAND) == true)
+			} else if (cont1.getBumper(RIGHTHAND) == true) {
 				driveMultiplier = .9;
-				
+			} else {
+				driveMultiplier = .5;
+			}
 
 			liftAxis = (-1 * cont1.getAxis(AxisType.kTriggerLeft)) + cont1.getAxis(AxisType.kTriggerRight);
 			lift1.set(SetDeadZone(liftAxis, .1)*.75);
@@ -137,10 +150,9 @@ public class Robot extends SampleRobot {
 				
 				drive.mecanumDrive_Cartesian(axisX, axisY, rotation, 0);
 			}
-			
-			//SmartDashboard.putString("DB/String 0", "Button 0: " + SmartDashboard.getBoolean("DB/Button 0"));
-			//SmartDashboard.putString("DB/Button 0", "Test");
-			
+			 
+			// SmartDashboard.putString("DB/String 0", "Button 0: " + SmartDashboard.getBoolean("DB/Button 0"));
+			// SmartDashboard.putString("DB/Button 0", "Test");
 			
 			SmartDashboard.putString("DB/String 0", "Encoder FL Raw: ");
 			SmartDashboard.putString("DB/String 5",  String.valueOf(encodFL.getRaw()));
