@@ -32,13 +32,12 @@ public class Robot extends SampleRobot {
 
 	static Encoder encodFL = new Encoder(4, 5, true, EncodingType.k4X);
 	static Encoder encodFR = new Encoder(6, 7, true, EncodingType.k4X);
-	static Encoder encodRL = new Encoder(0, 1, true, EncodingType.k4X);
 	static Encoder encodRR = new Encoder(2, 3, true, EncodingType.k4X); 
+	static Encoder encodRL = new Encoder(0, 1, true, EncodingType.k4X);
 
 	PIDController EFL = new PIDController(0.6, .001, 0.1, encodFL, frontLeft);
 	PIDController EFR = new PIDController(0.6, .001, 0.1, encodFR, frontRight);
 	PIDController ERR = new PIDController(0.6, .001, 0.1, encodRR, rearRight);
-	PIDController ERL = new PIDController(0.6, .001, 0.1, encodRL, rearLeft);
 	
     private static final Hand LEFTHAND = Hand.kLeft;
 	private static final Hand RIGHTHAND = Hand.kRight;
@@ -47,7 +46,6 @@ public class Robot extends SampleRobot {
 	XboxController cont2 = new XboxController(1);
 	
 	CameraServer server;
-    
 
     public Robot() {
     	server = CameraServer.getInstance();
@@ -103,20 +101,25 @@ public class Robot extends SampleRobot {
     	encodFR.reset();
     	encodFL.reset();
     	
-    	ERL.enable();
-    	ERR.enable();
-    	EFR.enable();
-    	EFL.enable(); 
+    	PIDController ERL = new PIDController(SmartDashboard.getNumber("DB/Slider 0"), SmartDashboard.getNumber("DB/Slider 1"), SmartDashboard.getNumber("DB/Slider 2"), encodRL, rearLeft);
     	
-    	ERL.setAbsoluteTolerance(200);
-    	ERR.setAbsoluteTolerance(200);
-    	EFR.setAbsoluteTolerance(200);
-    	EFL.setAbsoluteTolerance(200);
+    	ERL.enable();
+    //	ERR.enable();
+    //	EFR.enable();
+    //	EFL.enable(); 
+    	
+  
+    	ERL.setPercentTolerance(15);
+    //	ERL.setAbsoluteTolerance(200);
+    //	ERR.setAbsoluteTolerance(200);
+    //	EFR.setAbsoluteTolerance(200);
+    //	EFL.setAbsoluteTolerance(200);
+    	
      	
-    	ERL.setSetpoint(2000);
-    	ERR.setSetpoint(-2000);
-    	EFR.setSetpoint(-2000);
-     	EFL.setSetpoint(2000);
+    	ERL.setSetpoint(SmartDashboard.getNumber("DB/Slider 3") * 1000);
+    //	ERR.setSetpoint(-1000);
+    //	EFR.setSetpoint(-1000);
+    //	EFL.setSetpoint(1000);
     	
       drive.setSafetyEnabled(false);
 
@@ -168,6 +171,8 @@ public class Robot extends SampleRobot {
 			
 			SmartDashboard.putString("DB/String 4", "Loop Count: ");
 			SmartDashboard.putString("DB/String 9",  String.valueOf(count));
+			
+			SmartDashboard.getBoolean("DB/Button 1");
 			
 			count++;
 		}
