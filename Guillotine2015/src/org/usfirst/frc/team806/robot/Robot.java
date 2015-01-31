@@ -7,7 +7,6 @@ import org.usfirst.frc.team806.robot.XboxController.AxisType;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
@@ -28,7 +27,7 @@ public class Robot extends SampleRobot {
 	SpeedController frontRight = new Victor(2);
 	SpeedController frontLeft = new Victor(3);
 	
-	RobotDrive drive = new RobotDrive(frontLeft, rearLeft, frontRight, rearRight);
+	Drive drive = new Drive(frontLeft, rearLeft, frontRight, rearRight);
 
 	static Encoder encodFL = new Encoder(4, 5, true, EncodingType.k4X);
 	static Encoder encodFR = new Encoder(6, 7, true, EncodingType.k4X);
@@ -54,10 +53,10 @@ public class Robot extends SampleRobot {
         server.startAutomaticCapture("cam0");
         
         drive.setExpiration(0.1);
-        drive.setInvertedMotor(RobotDrive.MotorType.kFrontLeft, false);
-		drive.setInvertedMotor(RobotDrive.MotorType.kRearLeft, false);
-		drive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
-		drive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+        drive.setInvertedMotor(Drive.MotorType.kFrontLeft, false);
+		drive.setInvertedMotor(Drive.MotorType.kRearLeft, false);
+		drive.setInvertedMotor(Drive.MotorType.kFrontRight, true);
+		drive.setInvertedMotor(Drive.MotorType.kRearRight, true);
 
 		encodFL.setMaxPeriod(.1);
 		encodFL.setMinRate(10);
@@ -103,14 +102,13 @@ public class Robot extends SampleRobot {
     	
     	PIDController ERL = new PIDController(SmartDashboard.getNumber("DB/Slider 0"), SmartDashboard.getNumber("DB/Slider 1"), SmartDashboard.getNumber("DB/Slider 2"), encodRL, rearLeft);
     	
-    	ERL.enable();
+    //	ERL.enable();
     //	ERR.enable();
     //	EFR.enable();
     //	EFL.enable(); 
     	
   
-    	ERL.setPercentTolerance(15);
-    //	ERL.setAbsoluteTolerance(200);
+    	ERL.setAbsoluteTolerance(200);
     //	ERR.setAbsoluteTolerance(200);
     //	EFR.setAbsoluteTolerance(200);
     //	EFL.setAbsoluteTolerance(200);
@@ -169,10 +167,13 @@ public class Robot extends SampleRobot {
 			SmartDashboard.putString("DB/String 3", "Encoder RR Raw: ");
 			SmartDashboard.putString("DB/String 8",  String.valueOf(encodRR.getRaw()));
 			
-			SmartDashboard.putString("DB/String 4", "Loop Count: ");
-			SmartDashboard.putString("DB/String 9",  String.valueOf(count));
-			
-			SmartDashboard.getBoolean("DB/Button 1");
+			if(count %30 == 0){
+				encodRL.reset();
+		    	encodRR.reset();
+		    	encodFR.reset();
+		    	encodFL.reset();
+				
+			}
 			
 			count++;
 		}

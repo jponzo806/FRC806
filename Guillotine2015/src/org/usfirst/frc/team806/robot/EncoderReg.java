@@ -18,14 +18,51 @@ public class EncoderReg extends Robot{
 	 * 
 	 * @return The data of the specific encoder that has been called.
 	 */
-	public static double Call(String encode, int func){
-		
-		
-		
-		
-		
-		
-		
-		return 1;
+	public static double Call(String encode, int func) {
+
+		if (encode.equals("FL") && func == 1) {
+
+			int FLRaw = encodFL.getRaw() / 50;
+
+			if (FLRaw >= 1) {
+				return FLRaw;
+			}
+		}
+
+		if (encode.equals("FR") && func == 1) {
+
+			int FRRaw = encodFR.getRaw() / 50;
+
+			if (FRRaw >= 1) {
+				return FRRaw;
+			}
+		}
+		if (encode.equals("RR") && func == 1) {
+
+			int RRRaw = encodRR.getRaw() / 50;
+
+			if (RRRaw >= 1) {
+				return RRRaw;
+			}
+		}
+		if (encode.equals("RL") && func == 1) {
+
+			int RLRaw = encodRL.getRaw() / 50;
+
+			if (RLRaw >= 1) {
+				return RLRaw;
+			}
+
+		}
+		if (encode.equals("FIX") && func == 1) {
+
+			int RLRaw = encodRL.getRaw() / 50;
+
+			return RLRaw;
+
+		} else {
+			return 0;
+		}
+
 	}
 }
