@@ -155,6 +155,7 @@ public class Robot extends SampleRobot {
 			// SmartDashboard.putString("DB/String 0", "Button 0: " + SmartDashboard.getBoolean("DB/Button 0"));
 			// SmartDashboard.putString("DB/Button 0", "Test");
 			
+			/*
 			SmartDashboard.putString("DB/String 0", "Encoder FL Raw: ");
 			SmartDashboard.putString("DB/String 5",  String.valueOf(encodFL.getRaw()));
 			
@@ -166,6 +167,8 @@ public class Robot extends SampleRobot {
 
 			SmartDashboard.putString("DB/String 3", "Encoder RR Raw: ");
 			SmartDashboard.putString("DB/String 8",  String.valueOf(encodRR.getRaw()));
+			
+			*/
 			
 			if(count %30 == 0){
 				encodRL.reset();

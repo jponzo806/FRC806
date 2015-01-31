@@ -61,7 +61,7 @@ public class EncoderReg extends Robot{
 			return RLRaw;
 
 		} else {
-			return 0;
+			return 1;
 		}
 
 	}

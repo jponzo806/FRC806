@@ -496,17 +496,29 @@ public class Drive implements MotorSafety {
         RR =  EncoderReg.Call("RR", 1);
         RL =  EncoderReg.Call("RL", 1);
         
-        int DN = (int)(FL + FR + RR + RL)/4;
+        double DN = (FL + FR + RR + RL)/4;
         
         CFL = DN/FL;
         CFR = DN/FR;
         CRR = DN/RR;
         CRL = DN/RL;
         
+		SmartDashboard.putString("DB/String 0", "Encoder FL Desired: ");
+		SmartDashboard.putString("DB/String 5",  String.valueOf(CFL));
 		
-		SmartDashboard.putString("DB/String 4", "Desired Rotations : ");
+		SmartDashboard.putString("DB/String 1", "Encoder FR Desired: ");
+		SmartDashboard.putString("DB/String 6",  String.valueOf(CFR));
+		
+		SmartDashboard.putString("DB/String 2", "Encoder RL Desired: ");
+		SmartDashboard.putString("DB/String 7",  String.valueOf(CRL));
+
+		SmartDashboard.putString("DB/String 3", "Encoder RR Desired: ");
+		SmartDashboard.putString("DB/String 8",  String.valueOf(CRR));
+        
+		SmartDashboard.putString("DB/String 4", "Desired Average Rotations : ");
 		SmartDashboard.putString("DB/String 9",  String.valueOf(DN));
       
+		
         double wheelSpeeds[] = new double[kMaxNumberOfMotors];
         wheelSpeeds[MotorType.kFrontLeft_val] = xIn + yIn + rotation;
         wheelSpeeds[MotorType.kFrontRight_val] = -xIn + yIn - rotation;
