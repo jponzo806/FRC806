@@ -502,7 +502,7 @@ public class Drive implements MotorSafety {
         CFR = DN/FR;
         CRR = DN/RR;
         CRL = DN/RL;
-        
+     /*  
 		SmartDashboard.putString("DB/String 0", "Encoder FL Desired: ");
 		SmartDashboard.putString("DB/String 5",  String.valueOf(CFL));
 		
@@ -517,7 +517,7 @@ public class Drive implements MotorSafety {
         
 		SmartDashboard.putString("DB/String 4", "Desired Average Rotations : ");
 		SmartDashboard.putString("DB/String 9",  String.valueOf(DN));
-      
+      */
 		
         double wheelSpeeds[] = new double[kMaxNumberOfMotors];
         wheelSpeeds[MotorType.kFrontLeft_val] = xIn + yIn + rotation;
