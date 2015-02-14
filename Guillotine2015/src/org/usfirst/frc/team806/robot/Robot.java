@@ -34,10 +34,6 @@ public class Robot extends SampleRobot {
 	static Encoder encodRR = new Encoder(2, 3, true, EncodingType.k4X); 
 	static Encoder encodRL = new Encoder(0, 1, true, EncodingType.k4X);
 
-	//PIDController EFL = new PIDController(0.6, .001, 0.1, encodFL, frontLeft);
-	//PIDController EFR = new PIDController(0.6, .001, 0.1, encodFR, frontRight);
-	//PIDController ERR = new PIDController(0.6, .001, 0.1, encodRR, rearRight);
-	
     private static final Hand LEFTHAND = Hand.kLeft;
 	private static final Hand RIGHTHAND = Hand.kRight;
 	
@@ -45,6 +41,8 @@ public class Robot extends SampleRobot {
 	XboxController cont2 = new XboxController(1);
 	
 	CameraServer server;
+	
+	Autonomous autonomous;
 
     public Robot() {
     	server = CameraServer.getInstance();
@@ -84,6 +82,8 @@ public class Robot extends SampleRobot {
 		encodRR.setDistancePerPulse(5);
 		encodRR.setReverseDirection(true);
 		encodRR.setSamplesToAverage(7);
+		
+		autonomous = new Autonomous(rearLeft, rearRight, frontLeft, frontRight, lift1, lift2, encodFL, encodFR, encodRL, encodRR, drive);
     }
     
     public void disabled() {
@@ -94,166 +94,11 @@ public class Robot extends SampleRobot {
     }
 
     public void autonomous() {
-    	
-    	encodRL.reset();
-    	encodRR.reset();
-    	encodFR.reset();
-    	encodFL.reset();
-    	
-    	
-    	
-    	
-    	long time;
-    	long time2 = 1;
-    	
-    	while (encodRL.getRaw() + encodRR.getRaw() < 200){
     		
-    		frontRight.set(-.3);
-    		frontLeft.set(.3);
-    	    rearLeft.set(.3);
-    		rearRight.set(-.3);
-    		
-    	}
-    	frontRight.set(0);
-		frontLeft.set(0);
-	    rearLeft.set(0);
-		rearRight.set(0);
-		
-		encodRL.reset();
-    	encodRR.reset();
-    	encodFR.reset();
-    	encodFL.reset();
-		
-    	time = System.currentTimeMillis();
-    	while (time2 <= time + 1500){
-    	
-    		lift1.set(.7);
-    		lift2.set(.7);
-    		
-    		time2 = System.currentTimeMillis();
-    	}
-    	
-    	lift1.set(0);
-		lift2.set(0);
-    	frontRight.set(0);
-		frontLeft.set(0);
-	    rearLeft.set(0);
-		rearRight.set(0);
-		
-    	while (encodRL.getRaw() + encodRR.getRaw() < 2400){
-    		
-    		frontRight.set(-.35);
-    		frontLeft.set(.35);
-    	    rearLeft.set(.35);
-    		rearRight.set(-.35);
-    		
-    	}
-    	
-    	frontRight.set(0);
-		frontLeft.set(0);
-	    rearLeft.set(0);
-		rearRight.set(0);
-		
-		encodRL.reset();
-    	encodRR.reset();
-    	encodFR.reset();
-    	encodFL.reset();
-		
-    	while (encodRR.getRaw() < 1650){
-    		
-    		drive.mecanumDrive_Cartesian(0, 0, -.47, 0);
-    		
-    	}
-    	frontRight.set(0);
-		frontLeft.set(0);
-	    rearLeft.set(0);
-		rearRight.set(0);
-		
-		encodRL.reset();
-    	encodRR.reset();
-    	encodFR.reset();
-    	encodFL.reset();
-    	
-    	
-    	time = System.currentTimeMillis();
-    	while (time2 <= time + 806){
-    		
-    		time2 = System.currentTimeMillis();
-    	}
-    	
-    	
-    	while (encodRL.getRaw() + encodRR.getRaw() < 9500){
-
-    		frontRight.set(-.35);
-    		frontLeft.set(.35);
-    	    rearLeft.set(.35);
-    		rearRight.set(-.35);
-    		
-    	}
-    	frontRight.set(0);
-		frontLeft.set(0);
-	    rearLeft.set(0);
-		rearRight.set(0);
-		
-		encodRL.reset();
-    	encodRR.reset();
-    	encodFR.reset();
-    	encodFL.reset();
-    	
-    	while (encodRL.getRaw() < 1640){
-    		
-    		drive.mecanumDrive_Cartesian(0, 0, .47, 0);
-    		
-    	}
-    	frontRight.set(0);
-		frontLeft.set(0);
-	    rearLeft.set(0);
-		rearRight.set(0);
-		
-		encodRL.reset();
-    	encodRR.reset();
-    	encodFR.reset();
-    	encodFL.reset();
-    	
-    	time = System.currentTimeMillis();
-    	while (time2 <= time + 420){
-    		
-    		time2 = System.currentTimeMillis();
-    	}
-    	
-    	while (encodRL.getRaw() + encodRR.getRaw() < 2000){
-
-    		frontRight.set(-.35);
-    		frontLeft.set(.35);
-    	    rearLeft.set(.35);
-    		rearRight.set(-.35);
-    		
-    	}
-    	
-    	frontRight.set(0);
-		frontLeft.set(0);
-	    rearLeft.set(0);
-		rearRight.set(0);
-		
-		encodRL.reset();
-    	encodRR.reset();
-    	encodFR.reset();
-    	encodFL.reset();
-    	
-    	time = System.currentTimeMillis();
-    	while (time2 <= time + 1500){
-    	
-    		lift1.set(-.6);
-    		lift2.set(-.6);
-    		
-    		time2 = System.currentTimeMillis();
-    	}
-    	
-    	lift1.set(0);
-		lift2.set(0);
-    	
       drive.setSafetyEnabled(false);
-
+      
+      autonomous.start((int)SmartDashboard.getNumber("DB/Slider 0"));
+      
       }
 
 	public void operatorControl() {
@@ -300,6 +145,7 @@ public class Robot extends SampleRobot {
 
 			SmartDashboard.putString("DB/String 3", "Encoder RR Raw: ");
 			SmartDashboard.putString("DB/String 8",  String.valueOf(encodRR.getRaw()));
+			
 			
 			
 			
