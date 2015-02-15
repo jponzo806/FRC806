@@ -7,6 +7,7 @@ import org.usfirst.frc.team806.robot.XboxController.AxisType;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Talon;
@@ -33,6 +34,8 @@ public class Robot extends SampleRobot {
 	static Encoder encodFR = new Encoder(6, 7, true, EncodingType.k4X);
 	static Encoder encodRR = new Encoder(2, 3, true, EncodingType.k4X); 
 	static Encoder encodRL = new Encoder(0, 1, true, EncodingType.k4X);
+	
+	Gyro gyro = new Gyro(0);
 
     private static final Hand LEFTHAND = Hand.kLeft;
 	private static final Hand RIGHTHAND = Hand.kRight;
@@ -83,7 +86,7 @@ public class Robot extends SampleRobot {
 		encodRR.setReverseDirection(true);
 		encodRR.setSamplesToAverage(7);
 		
-		autonomous = new Autonomous(rearLeft, rearRight, frontLeft, frontRight, lift1, lift2, encodFL, encodFR, encodRL, encodRR, drive);
+		autonomous = new Autonomous(rearLeft, rearRight, frontLeft, frontRight, lift1, lift2, encodFL, encodFR, encodRL, encodRR, drive, gyro);
     }
     
     public void disabled() {
@@ -106,6 +109,7 @@ public class Robot extends SampleRobot {
 		long count = 0;
 		double driveMultiplier = .5;
 		double liftAxis;
+		gyro.reset();
 		
 		while (isEnabled() && isOperatorControl()) {
 			Timer.delay(.05);
@@ -145,6 +149,10 @@ public class Robot extends SampleRobot {
 
 			SmartDashboard.putString("DB/String 3", "Encoder RR Raw: ");
 			SmartDashboard.putString("DB/String 8",  String.valueOf(encodRR.getRaw()));
+			
+			SmartDashboard.putString("DB/String 4", "Get Gyro: ");
+			SmartDashboard.putString("DB/String 9",  String.valueOf(gyro.getAngle()));
+			
 			
 			
 			
